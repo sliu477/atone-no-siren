@@ -79,6 +79,6 @@ class PokerHand
   end
 
   def ranks
-    @cards.map { |card| card[1].to_i }
+    @cards.map { |card| card[1..-1].to_i }
   end
 end
