@@ -28,12 +28,12 @@ class PokerHandCheckerService
           best: cards == best_hand
         }
       end
-      
-      response = {result: result}
+
+      response = { result: result }
       response[:error] = error if error.present?
 
-      return response
-      end
+      response
+    end
 
     def check_typo_card_index(card_array)
       poker_card_regex = /^([SHDC])([1-9]|1[0-3])$/
