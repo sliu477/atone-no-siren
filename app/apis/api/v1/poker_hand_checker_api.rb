@@ -1,18 +1,12 @@
 module API
   module V1
     class PokerHandCheckerApi < Grape::API
+      include PokerHandValidator
+
       resource :poker_hand do
         helpers do
-          def card_set_invalid?(card_sets)
-            card_sets.empty? || duplicates?(card_sets) || invalid_format?(card_sets)
-          end
-
-          def duplicates?(card_sets)
-            card_sets != card_sets.uniq
-          end
-
-          def invalid_format?(card_sets)
-            card_sets.any? { |c| c.split.length != 5 }
+          def params_invalid?(card_sets)
+            !PokerHandValidator.validate_multiple_card_sets(card_sets)
           end
         end
 
@@ -23,12 +17,12 @@ module API
         end
 
         post '/' do
-          card_sets = params[:cards]
+          card_sets = params[:cards].map(&:upcase)
 
-          if card_set_invalid?(card_sets)
-            response = { "error_message": '入力されたカード組は半角スペース区切りで、重複してないかをご確認ください' }
+          if params_invalid?(card_sets)
+            response = { "error": '入力されたカード組は半角スペース区切りで、重複がないか確認してください。' }
           else
-            response = PokerHandCheckerService.evaluate_card_set(card_sets)
+            response = PokerHandEvaluationService.analyze_card_sets(card_sets)
           end
 
           present response
