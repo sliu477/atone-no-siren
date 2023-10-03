@@ -23,7 +23,7 @@ class PokerHand
     elsif straight?        then 'ストレート'
     elsif three_of_a_kind? then 'スリー・オブ・ア・カインド'
     elsif two_pair?        then 'ツーペア'
-    elsif pair?            then 'ワンペア'
+    elsif pair?            then 'ペア'
     else 'ハイカード'
     end
   end
