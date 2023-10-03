@@ -1,0 +1,20 @@
+
+<div class="background">
+  <div>
+    <p class="title">Poker Hand Checker</p>
+    <p class="instruction">半角英字大文字のスート（S,H,D,C）とランク（1〜13）の組み合わせで<br>カードを入力し、役を調べる。</p>
+  </div>
+  <div>
+    <%= form_tag("/poker_checker/check") do %>
+      <input class="form_input" name="cards" type="text" required placeholder="S8 H7 D4 C2 S3" style="text-align: center;" value="<%= flash[:cards] %>">
+      <br><button class="button">調べる</button>
+    <% end %>
+    <% if flash[:message] %>
+      <div class="flash_msg">
+        <%= simple_format(flash[:message]) %>
+      </div>
+    <% end %>
+  </div>
+  </div>
+</div>
+
