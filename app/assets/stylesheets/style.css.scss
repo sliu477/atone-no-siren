@@ -6,16 +6,16 @@ body {
 .title {
     color: #4056A1;
     font-weight: bold;
-    font-size: 3.8vw;
+    font-size: 3vw;
 }
 
 .instruction {
-    font-size: 2.4vw;
+    font-size: 2vw;
     color: #7E685A
 }
 
 .form_input {
-    font-size: 3vw;
+    font-size: 2.8vw;
     width: 35vw;
     height: 7vw;
     background-color: #C2B9B0;
@@ -25,6 +25,7 @@ body {
 }
 
 .button {
+    font-size: 2vw;
     width: 37vw;
     height: 5vw;
     color: #F13C20;
@@ -35,8 +36,14 @@ body {
     margin: 2vw
 }
 
-.flash_msg {
+.result {
     font-weight: bold;
-    font-size: 20px;
-    color: #F13C20;
+    font-size: 2.5vw;
+    color: #4056A1;
   }
+
+.error {
+    font-weight: bold;
+    font-size: 2.5vw;
+    color: #F13C20;
+}

@@ -9,9 +9,14 @@
       <input class="form_input" name="cards" type="text" required placeholder="S8 H7 D4 C2 S3" style="text-align: center;" value="<%= flash[:cards] %>">
       <br><button class="button">調べる</button>
     <% end %>
-    <% if flash[:message] %>
-      <div class="flash_msg">
-        <%= simple_format(flash[:message]) %>
+    <% if flash[:hand_type] %>
+      <div class="result">
+        <%= simple_format(flash[:hand_type]) %>
+      </div>
+    <% end %>
+    <% if flash[:error] %>
+      <div class="error">
+        <%= simple_format(flash[:error]) %>
       </div>
     <% end %>
   </div>
