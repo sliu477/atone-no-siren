@@ -6,14 +6,10 @@ class PokerHandCheckerController < ApplicationController
     cards = params[:cards]
     flash[:cards] = cards
 
-    if !PokerHandValidator.validate_single_card_set(cards)
-      message = "五つのカード指定文字を半⾓スペース区切りで入力してください（例：'S3 H4 H5 D6 C7'）"
-    else
-      message = PokerHandEvaluationService.classify_card_set(cards)
-    end
+    result = PokerHandEvaluationService.classify_card_set(cards)
+    flash.now[:error] = result[:error]&.join("\n")
+    flash.now[:hand_type] = result[:hand_type]
 
-    flash[:message] = message.is_a?(Array) ? message.join("\n") : message
-
-    redirect_to "/poker_checker"
+    render :index
   end
 end

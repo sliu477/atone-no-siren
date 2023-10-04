@@ -1,16 +1,15 @@
 class PokerHandEvaluationService
   class << self
-    include PokerHandValidator
-
     def analyze_card_sets(card_sets)
       valid_card_sets, invalid_card_sets_errors = process_card_sets(card_sets)
-      best_hand = BestPokerHandChecker.check_best_poker_hand(valid_card_sets)
-      generate_response(valid_card_sets, invalid_card_sets_errors, best_hand)
+      best_hand = BestPokerHandChecker.check_best_poker_hand(valid_card_sets) if valid_card_sets.present?
+      generate_analysis_result(valid_card_sets, invalid_card_sets_errors, best_hand)
     end
 
     def classify_card_set(card_set)
-      card_arr = card_set.split
-      check_typo_card_index(card_arr) || PokerHand.new(card_arr).evaluate_hand_type
+      error_message = PokerHandValidator.validate_single_card_set(card_set)
+      hand_type = PokerHand.new(card_set.split).evaluate_hand_type if error_message.blank?
+      generate_classification_result(error_message, hand_type)
     end
 
     private
@@ -20,38 +19,35 @@ class PokerHandEvaluationService
       invalid_card_sets_errors = []
 
       card_sets.each do |cards|
-        card_arr = cards.split
-        typo_index_msg = check_typo_card_index(card_arr)
-        if typo_index_msg.blank?
+        error_message = PokerHandValidator.validate_single_card_set(cards)
+
+        if error_message.blank?
           valid_card_sets << cards
         else
-          invalid_card_sets_errors << { card: cards, msg: typo_index_msg }
+          invalid_card_sets_errors << { card: cards, msg: error_message }
         end
       end
 
       [valid_card_sets, invalid_card_sets_errors]
     end
 
-    def generate_response(valid_card_sets, errors, best_hand)
+    def generate_analysis_result(valid_card_sets, errors, best_hand)
+      response = {}
       result = valid_card_sets.map do |cards|
         card_arr = cards.split
         hand_type = PokerHand.new(card_arr).evaluate_hand_type
         { card: cards, hand: hand_type, best: cards == best_hand }
       end
 
-      response = { result: result }
+      response[:result] = result if result.present?
       response[:error] = errors if errors.present?
       response
     end
 
-    def check_typo_card_index(card_array)
-      poker_card_regex = /^([SHDC])([1-9]|1[0-3])$/
-      error_msg_arr = []
+    def generate_classification_result(error_message, hand_type)
+      return { error: error_message } if error_message.present?
 
-      card_array.each.with_index(1) do |card, i|
-        error_msg_arr.push("#{i}番目のカード指定文字が不正です。(#{card})") if card !~ poker_card_regex
-      end
-      error_msg_arr.blank? ? nil : error_msg_arr
+      { hand_type: hand_type }
     end
   end
 end

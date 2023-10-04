@@ -5,8 +5,12 @@ module API
 
       resource :poker_hand do
         helpers do
-          def params_invalid?(card_sets)
-            !PokerHandValidator.validate_multiple_card_sets(card_sets)
+          def params_invalid?
+            params[:cards].blank? || card_sets_duplicate?
+          end
+
+          def card_sets_duplicate?
+            params[:cards] != params[:cards].uniq
           end
         end
 
@@ -17,12 +21,13 @@ module API
         end
 
         post '/' do
-          card_sets = params[:cards].map(&:upcase)
 
-          if params_invalid?(card_sets)
+          if params_invalid?
             response = { "error": '入力されたカード組は半角スペース区切りで、重複がないか確認してください。' }
+            status 400
           else
-            response = PokerHandEvaluationService.analyze_card_sets(card_sets)
+            response = PokerHandEvaluationService.analyze_card_sets(params[:cards])
+            status 200
           end
 
           present response
