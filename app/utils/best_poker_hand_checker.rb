@@ -1,7 +1,6 @@
-class BestPokerHandChecker
+module BestPokerHandChecker
   def self.check_best_poker_hand(card_sets)
     card_set_score = card_sets.map do |card_set|
-
       card_set_array = card_set.split
       hand_type = PokerHand.new(card_set_array).evaluate_hand_type
       {

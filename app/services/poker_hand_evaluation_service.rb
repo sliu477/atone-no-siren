@@ -1,15 +1,16 @@
 class PokerHandEvaluationService
   class << self
+    include BestPokerHandChecker
     def analyze_card_sets(card_sets)
       valid_card_sets, invalid_card_sets_errors = process_card_sets(card_sets)
       best_hand = BestPokerHandChecker.check_best_poker_hand(valid_card_sets) if valid_card_sets.present?
-      generate_analysis_result(valid_card_sets, invalid_card_sets_errors, best_hand)
+      build_analysis_response(valid_card_sets, invalid_card_sets_errors, best_hand)
     end
 
     def classify_card_set(card_set)
       error_message = PokerHandValidator.validate_single_card_set(card_set)
       hand_type = PokerHand.new(card_set.split).evaluate_hand_type if error_message.blank?
-      generate_classification_result(error_message, hand_type)
+      build_classification_response(error_message, hand_type)
     end
 
     private
@@ -31,7 +32,7 @@ class PokerHandEvaluationService
       [valid_card_sets, invalid_card_sets_errors]
     end
 
-    def generate_analysis_result(valid_card_sets, errors, best_hand)
+    def build_analysis_response(valid_card_sets, errors, best_hand)
       response = {}
       result = valid_card_sets.map do |cards|
         card_arr = cards.split
@@ -44,7 +45,7 @@ class PokerHandEvaluationService
       response
     end
 
-    def generate_classification_result(error_message, hand_type)
+    def build_classification_response(error_message, hand_type)
       return { error: error_message } if error_message.present?
 
       { hand_type: hand_type }
