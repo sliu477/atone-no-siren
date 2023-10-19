@@ -8,8 +8,9 @@ class PokerHandEvaluationService
     end
 
     def classify_card_set(card_set)
-      error_message = PokerHandValidator.validate_single_card_set(card_set)
-      hand_type = PokerHand.new(card_set.split).evaluate_hand_type if error_message.blank?
+      cards_arr = card_set.split
+      error_message = PokerHandValidator.validate_single_card_set(cards_arr)
+      hand_type = PokerHand.new(cards_arr).evaluate_hand_type if error_message.blank?
       build_classification_response(error_message, hand_type)
     end
 

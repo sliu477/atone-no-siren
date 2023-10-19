@@ -1,5 +1,4 @@
 class PokerHand
-
   CARD_RANK_ORDER = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1]
 
   def initialize(cards)
@@ -14,7 +13,7 @@ class PokerHand
     elsif straight?        then 'ストレート'
     elsif three_of_a_kind? then 'スリー・オブ・ア・カインド'
     elsif two_pair?        then 'ツーペア'
-    elsif pair?            then 'ペア'
+    elsif pair?            then 'ワンペア'
     else 'ハイカード'
     end
   end
@@ -34,10 +33,12 @@ class PokerHand
   end
 
   def flush?
-    suits.uniq.count == 1
+    suits.uniq.size == 1
   end
 
   def straight?
+    return false if ranks.uniq.size != 5
+
     ranking_index = ranks.map { |r| CARD_RANK_ORDER.index(r) }
     return true if ranks.max - ranks.min == 4 || ranking_index.max - ranking_index.min == 4
   end
@@ -57,8 +58,7 @@ class PokerHand
   def n_of_a_kind?(n)
     rank_counts = Hash.new(0)
 
-    @cards.each do |card|
-      rank = card[1..-1]
+    ranks.each do |rank|
       rank_counts[rank] += 1
     end
 
