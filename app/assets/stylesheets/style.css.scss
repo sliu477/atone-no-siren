@@ -1,0 +1,49 @@
+body {
+    background-color: #EFE2BA;
+    text-align: center;
+  }
+
+.title {
+    color: #4056A1;
+    font-weight: bold;
+    font-size: 3vw;
+}
+
+.instruction {
+    font-size: 2vw;
+    color: #7E685A
+}
+
+.form_input {
+    font-size: 2.8vw;
+    width: 35vw;
+    height: 7vw;
+    background-color: #C2B9B0;
+    border-radius: 1vw;
+    border: 0.5vw solid;
+    border-color: #7E685A;
+}
+
+.button {
+    font-size: 2vw;
+    width: 37vw;
+    height: 5vw;
+    color: #F13C20;
+    background-color: #C2B9B0;
+    border: 0.5vw solid;
+    border-color:#F13C20;
+    border-radius: 0.5vw;
+    margin: 2vw
+}
+
+.result {
+    font-weight: bold;
+    font-size: 2.5vw;
+    color: #4056A1;
+  }
+
+.error {
+    font-weight: bold;
+    font-size: 2.5vw;
+    color: #F13C20;
+}

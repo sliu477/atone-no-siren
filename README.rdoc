@@ -1,28 +1,45 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+概要:
+    - Webアプリケーション
+		手札1組を受付、役を返す
+		合計9種の役を判定できる
+		*スコープ外: ロイヤルストレートフラッシュ
+	- API
+		JSONで複数組の手札を受付と、それぞれの役と、その中で最強の手かどうかを返す
+		*スコープ外: 同じ役同士の強さの比較
 
-Things you may want to cover:
+主な機能:
+    - Webアプリケーション
+        poker_hand_checker_controller.rb
+            Webリクエストを受け付けてレスポンスを返す
+        poker_hand/index.html.erb
+            入力画面・結果を表示する画面
+	- API
+        poker_hand_checker_api.rb
+            APIリクエストを受け付けてレスポンスを返す
+            helpersでリクエストパラメータのバリデーションをする
+    - 共通
+        poker_hand_evaluation_service.rb
+            役名判定や強弱判定の処理を行い、レスポンスを整形して返す
+        best_poker_hand_checker.rb
+            複数の組の手札の中で最強の手を判定する
+        poker_hand_validator.rb
+            手札の検証を行う
+        poker_hand.rb
+            役判定するロジックをこのclassにまとめている
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+動作確認:
+    (ローカルでサーバー立ち上げてから)
+    - Webアプリケーション
+        http://localhost:3000/poker_checker にアクセスし、手札を入力する
+    - API
+        postmanを使用し、POSTメソッドで http://localhost:3000/api/v1/poker_hand を叩く
+        リクエストパラメータは5枚のカードを半⾓スペースで区切った⽂字列配列をJSONのフォマットで入力する
+            (例：
+                {
+                    "cards":["D1 S9 H4 H6 H2",
+                             "D13 D12 D11 D10 D1",
+                             "S1 S2 S3 S4 S5"]
+                }
+            )
